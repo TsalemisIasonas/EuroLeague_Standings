@@ -1,0 +1,61 @@
+/* Set font family and size for the whole page */
+body {
+  font-family: 'BWGradual', sans-serif;
+  font-size: 14px;
+}
+
+/* Set background color for the whole page */
+body {
+  background-color: #fa5500;
+}
+
+/* Set background color and font properties for the header */
+.header_container {
+  background-color: #c04a0f;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 600;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Set style for the table */
+table {
+  border-collapse: collapse;
+  margin: 30px auto;
+  width: 90%;
+}
+
+/* Set style for the table header */
+th {
+  background-color: #212529;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  padding: 15px;
+}
+
+/* Set style for the table rows */
+td {
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  color: #212529;
+  font-size: 14px;
+  padding: 15px;
+}
+
+/* Set style for the odd rows */
+tr:nth-child(odd) {
+  background-color: #f2f2f2;
+}
+
+/* Set style for the hover effect */
+tr:hover {
+  background-color: #e8eff6;
+}
+
+/* Set style for the first column */
+td:first-child {
+  font-weight: 600;
+}
