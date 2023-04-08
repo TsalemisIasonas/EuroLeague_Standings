@@ -31,4 +31,7 @@ async function loadStandings() {
   document.getElementById("standings-table").appendChild(table);
 }
 
-loadStandings();
+const standings_button = document.getElementById("standings_button");
+standings_button.addEventListener('click',function(){
+  loadStandings()
+})

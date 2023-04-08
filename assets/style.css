@@ -6,24 +6,39 @@ body {
 
 /* Set background color for the whole page */
 body {
-  background-color: #fa5500;
+  background-image:url(images/background_img.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: #212529;
 }
 
-/* Set background color and font properties for the header */
-.header_container {
-  background-color: #c04a0f;
-  color: #fff;
-  font-size: 24px;
-  font-weight: 600;
-  padding: 20px;
-  text-align: center;
+
+
+#standings_button {
+  margin-top: 30%;
+  margin-left: 5%;
+  background-image: url(images/standings_button.png);
+  background-size: cover;
+  width: 600px;
+  height: 300px;
+  background-color: transparent;
+  border: none;
+  z-index: 0;
+  /* position: relative; */
 }
 
 /* Set style for the table */
 table {
+  position: absolute;
   border-collapse: collapse;
   margin: 30px auto;
   width: 90%;
+  top: 0;
+  left: 5%;
+  z-index: 1;
+  background-color: #ffffff10;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 /* Set style for the table header */
@@ -34,28 +49,35 @@ th {
   font-weight: 600;
   text-align: left;
   padding: 15px;
+  border: 1px solid #fc6f03e3;
 }
 
 /* Set style for the table rows */
 td {
-  background-color: #fff;
-  border: 1px solid #dee2e6;
-  color: #212529;
+  background-color: rgb(37, 43, 48,0.5);
+  border: 1px solid #fc6f03e3;
+  color: #dee2e6;
   font-size: 14px;
   padding: 15px;
+  transition: 0.1s ease-in-out;
 }
 
 /* Set style for the odd rows */
-tr:nth-child(odd) {
+/* tr:nth-child(odd) {
   background-color: #f2f2f2;
-}
+} */
 
 /* Set style for the hover effect */
-tr:hover {
-  background-color: #e8eff6;
+td:hover {
+  text-shadow: 2px 2px 2px orange;
 }
+
 
 /* Set style for the first column */
 td:first-child {
   font-weight: 600;
 }
+
+
+
+
