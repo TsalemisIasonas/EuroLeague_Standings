@@ -26,12 +26,74 @@ async function get_data() {
 }
 
 async function loadStandings() {
+  const loaderContainer = document.createElement('div');
+  loaderContainer.id = 'loader_container';
+  const loader = document.createElement('div');
+  loader.id = 'loader';
+  loaderContainer.appendChild(loader);
+  document.getElementById('standings-table').appendChild(loaderContainer);
+  
   const standings = await get_data();
   const table = createTable(standings);
   document.getElementById("standings-table").appendChild(table);
+
+  const goBackButton = document.createElement('button');
+  goBackButton.id = 'goBack';
+  goBackButton.textContent = '<';
+
+  goBackButton.addEventListener('click', () => {
+    const standingsTable = document.querySelector('#standings-table table');
+    standingsTable.remove();
+    goBackButton.remove();
+  });
+  
+  document.getElementById('standings-table').appendChild(goBackButton);
+  
+  loader.style.display = 'none';
+  loaderContainer.style.display = 'none';
 }
 
-const standings_button = document.getElementById("standings_button");
-standings_button.addEventListener('click',function(){
-  loadStandings()
+const standingsButton = document.getElementById("standings_button");
+standingsButton.addEventListener('click',function(){
+  loadStandings();
 })
+
+
+async function get_predicted_data() {
+  return eel.get_predicted_data()();
+}
+
+async function loadPredictedStandings() {
+  const loaderContainer = document.createElement('div');
+  loaderContainer.id = 'loader_container';
+  const loader = document.createElement('div');
+  loader.id = 'loader';
+  loaderContainer.appendChild(loader);
+  document.getElementById('standings-table').appendChild(loaderContainer);
+  
+  const prediction = await get_predicted_data();
+  const table = createTable(prediction);
+  document.getElementById("standings-table").appendChild(table);
+
+  const goBackButton = document.createElement('button');
+  goBackButton.id = 'goBack';
+  goBackButton.textContent = '<';
+
+  goBackButton.addEventListener('click', () => {
+    const standingsTable = document.querySelector('#standings-table table');
+    standingsTable.remove();
+    goBackButton.remove();
+  });
+  
+  document.getElementById('standings-table').appendChild(goBackButton);
+  
+  loader.style.display = 'none';
+  loaderContainer.style.display = 'none';
+}
+
+const predictButton = document.getElementById("predict_button");
+predictButton.addEventListener('click',function(){
+  loadPredictedStandings();
+})
+
+

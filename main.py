@@ -1,16 +1,15 @@
 from bs4 import BeautifulSoup as bs
 from tkinter import Tk
+from sklearn.linear_model import LinearRegression
 import requests,os
 import pandas as pd
 import eel
 
 eel.init(os.path.join(os.path.dirname(__file__),'assets'))
 
-class Scraper():
+class Scraper:
     def __init__(self) -> None:
         self.scrape_standings()
-        self.add_header()
-        self.add_rows()
         
     def scrape_standings(self):
         target = requests.get('https://www.euroleaguebasketball.net/euroleague/standings/')
@@ -36,7 +35,14 @@ class Scraper():
         return rows
 
     def make_dataset(self):
-        dataset = pd.DataFrame(self.add_rows(),columns=self.add_header())
+        header = self.add_header()
+        rows = self.add_rows()
+
+        header.insert(0, 'Position')
+        for i, row in enumerate(rows):
+            rows[i] = (i + 1,) + tuple(row)
+
+        dataset = pd.DataFrame(rows,columns=header)
         return dataset
 
     def clear_dataset(self,df):
@@ -51,20 +57,58 @@ class Scraper():
         df['Club'] = clubs
         return df
     
-
 def scrape():
     scraper = Scraper()
     df = scraper.make_dataset()
     df = scraper.clear_dataset(df)
     return df
+    
+class Predicter:
+    def __init__(self) -> None:
+        self.df = scrape()
+        self.df['Win%'] = self.df['Win%'].str.replace('%', '').astype(float)
+        
+    def create_prediction(self):
+        for i, row in self.df.iterrows():
+            l10 = row['L10']
+            wins, losses = map(int, l10.split('-'))
+            win_pct_l10 = wins / (wins + losses)
+            self.df.at[i, 'L10'] = win_pct_l10
+            
+            
+        features = ['Won', 'Lost', 'Win%', '+/-', 'L10']
+        model = LinearRegression()
+        
+        # fit the model to the data
+        model.fit(self.df[features], self.df['Position'])
+        teams = pd.DataFrame({'Club': self.df['Club'], 'GP': [int(i)+5 for i in self.df['GP']], 'Won': self.df['Won'], 'Lost': self.df['Lost'], 'Win%': self.df['Win%'], '+/-': self.df['+/-'], 'L10': self.df['L10']})
+        teams[features] = teams[features].apply(pd.to_numeric) + 5
+        teams['Predicted Position'] = model.predict(teams[features])
+        self.teams = teams.sort_values(by='Predicted Position')
+        self.teams.insert(0, 'Position', self.teams.index + 1)
+        self.teams.drop('Predicted Position',axis = 1, inplace = True)
+        return self.teams
+    
+
+
 
 def current_standings():
     df = scrape()
     return df.to_dict('records')
 
+def predicted_standings():
+    df = Predicter()
+    df = df.create_prediction()
+    return df.to_dict('records')
+    
+
 @eel.expose 
 def get_data():
     return current_standings()
+
+@eel.expose
+def get_predicted_data():
+    return predicted_standings()
 
 
 if __name__=='__main__':    
